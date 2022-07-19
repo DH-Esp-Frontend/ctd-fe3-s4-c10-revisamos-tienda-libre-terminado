@@ -3,13 +3,21 @@ import React from "react";
 import { TyC, TyCsAPIResponse } from "../types";
 import styles from "../styles/TYC.module.css";
 import Head from "next/head";
+import { defaultLocale, TEXTS_BY_LANGUAGE } from "../locale/constants";
+import { useRouter } from "next/router";
 
 type IProps = {
   data: TyCsAPIResponse;
 };
 
 const TerminosYCondiciones: NextPage<IProps> = ({ data }) => {
+  const { locale } = useRouter();
+
   if (!data) return null;
+
+  const { MAIN } =
+    TEXTS_BY_LANGUAGE[locale as keyof typeof TEXTS_BY_LANGUAGE] ??
+    TEXTS_BY_LANGUAGE[defaultLocale];
 
   const { version, tycs } = data;
 
@@ -23,23 +31,27 @@ const TerminosYCondiciones: NextPage<IProps> = ({ data }) => {
   return (
     <div className={styles.tycContainer}>
       <Head>
-        <title>Tienda Libre - Términos y Condiciones</title>
+        <title>Tienda Libre - {MAIN.TYCS}</title>
         <meta
           name="description"
           content="términos y condiciones de Tienda Libre"
         />
       </Head>
-      <h2>Terminos y Concidiones</h2>
+      <h2>{MAIN.TYCS}</h2>
       <p>Versión: {version}</p>
       {tycs.map(renderTyc)}
     </div>
   );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps({
+  locale,
+}: {
+  locale: string;
+}): Promise<{ props: { data: TyCsAPIResponse } }> {
   const baseUrl = "http://localhost:3000/"; // Cambiar por la url del proyecto una vez deployada la API
 
-  const response = await fetch(`${baseUrl}/api/tycs`);
+  const response = await fetch(`${baseUrl}/api/tycs/${locale}`);
 
   const data = await response.json();
 

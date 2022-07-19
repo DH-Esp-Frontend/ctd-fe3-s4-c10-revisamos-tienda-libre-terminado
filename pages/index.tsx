@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { defaultLocale, TEXTS_BY_LANGUAGE } from "../locale/constants";
 import styles from "../styles/Home.module.css";
 import { Product, ProductsAPIResponse } from "../types";
 
@@ -9,7 +11,13 @@ type IProps = {
 };
 
 const Home: NextPage<IProps> = ({ data }) => {
+  const { locale } = useRouter();
+
   if (!data) return null;
+
+  const { MAIN } =
+    TEXTS_BY_LANGUAGE[locale as keyof typeof TEXTS_BY_LANGUAGE] ??
+    TEXTS_BY_LANGUAGE[defaultLocale];
 
   const formatPrice: (price: number) => string = (price) =>
     price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -59,14 +67,14 @@ const Home: NextPage<IProps> = ({ data }) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Tienda Libre - Productos Destacados</title>
+        <title>Tienda Libre - {MAIN.PRODUCTS}</title>
         <meta
           name="description"
           content="listado de productos destacados de Tienda Libre"
         />
       </Head>
       <main className={styles.main}>
-        <h1>Productos destacados</h1>
+        <h1>{`${MAIN.PRODUCTS}`}</h1>
         <div className={styles.grid}>{data.map(renderProductCard)}</div>
       </main>
       <footer className={styles.footer}>
@@ -84,10 +92,14 @@ const Home: NextPage<IProps> = ({ data }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps({
+  locale,
+}: {
+  locale: string;
+}): Promise<{ props: { data: ProductsAPIResponse } }> {
   const baseUrl = "http://localhost:3000/"; // Cambiar por la url del proyecto una vez deployada la API
 
-  const response = await fetch(`${baseUrl}/api/products`);
+  const response = await fetch(`${baseUrl}/api/products/${locale}`);
 
   const data = await response.json();
 
