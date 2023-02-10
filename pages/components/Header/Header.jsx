@@ -41,7 +41,7 @@ const Header = () => {
             <Image
               src="/spanish.png"
               alt="spanish"
-              layout="fixed"
+         
               width={20}
               height={20}
             />
@@ -53,7 +53,7 @@ const Header = () => {
             <Image
               src="/brazil.png"
               alt="usa"
-              layout="fixed"
+           
               width={20}
               height={20}
             />
@@ -65,7 +65,7 @@ const Header = () => {
             <Image
               src="/usa.png"
               alt="usa"
-              layout="fixed"
+           
               width={20}
               height={20}
             />
