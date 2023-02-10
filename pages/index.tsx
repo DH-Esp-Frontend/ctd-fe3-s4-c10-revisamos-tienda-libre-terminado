@@ -31,7 +31,7 @@ const Home: NextPage<IProps> = ({ data }) => {
         key={index}
         alt={index <= rating ? "yellow star" : "empty star"}
         src={index <= rating ? "/yellowStar.png" : "/emptyStar.png"}
-        layout="fixed"
+    
         width={20}
         height={20}
       />
@@ -54,7 +54,7 @@ const Home: NextPage<IProps> = ({ data }) => {
       <div className={styles.imageDescription}>
         <Image
           src={image}
-          layout="fixed"
+         
           width={100}
           height={130}
           alt={title}
@@ -67,7 +67,7 @@ const Home: NextPage<IProps> = ({ data }) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Tienda Libre - {MAIN.PRODUCTS}</title>
+        <title>{MAIN.PRODUCTS}</title>
         <meta
           name="description"
           content="listado de productos destacados de Tienda Libre"
